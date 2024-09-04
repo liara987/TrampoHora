@@ -59,21 +59,19 @@ const items = ref([
 ])
 
 function calculateTotalHours(times: [string, string, string]) {
-  console.log(start.value);
+  let totalMinutes = 0;
+
+  times.forEach(time => {
+    const [hours, minutes] = time.split(':').map(Number);
+    totalMinutes += (hours * 60) + minutes;
+  });
+
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainingMinutes = totalMinutes % 60;
+
+  console.log(`${totalHours}:${remainingMinutes.toString().padStart(2, '0')}`);
   
-  // let totalMinutes = 0;
-
-  // times.forEach(time => {
-  //   const [hours, minutes] = time.split(':').map(Number);
-  //   totalMinutes += (hours * 60) + minutes;
-  // });
-
-  // const totalHours = Math.floor(totalMinutes / 60);
-  // const remainingMinutes = totalMinutes % 60;
-
-  // console.log(`${totalHours}:${remainingMinutes.toString().padStart(2, '0')}`);
-  
-  // // return `${totalHours}:${remainingMinutes.toString().padStart(2, '0')}`;
+  return `${totalHours}:${remainingMinutes.toString().padStart(2, '0')}`;
 }
 
 watch(start,(changed)=>{
@@ -86,7 +84,7 @@ watch(start,(changed)=>{
   <div>
     <v-data-table :items="items" :hide-default-footer="true">      
       <template v-slot:item.start="props">
-        <v-text-field @change="calculateTotalHours" label="Starting hour" :model-value="start" suffix="AM" type="time"></v-text-field>
+        <v-text-field label="Starting hour" :model-value="start" suffix="AM" type="time"></v-text-field>
       </template>
 
       <template v-slot:item.stop="props">
